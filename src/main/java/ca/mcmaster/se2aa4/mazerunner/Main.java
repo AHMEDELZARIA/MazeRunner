@@ -5,16 +5,25 @@ import java.io.File;
 import java.io.FileReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.commons.cli.*;
 
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
+
         System.out.println("** Starting Maze Runner");
+        Options cli_options = new Options();
+        cli_options.addOption("i", "input", true, "specifies a .txt file holding matrix");
+        CommandLineParser cli_parser = new DefaultParser();
+
         try {
-            System.out.println("**** Reading the maze from file " + args[0]);
-            BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+            
+            CommandLine cmd = cli_parser.parse(cli_options, args);
+            System.out.println("**** Reading the maze from file " + cmd.getOptionValue("i"));
+
+            BufferedReader reader = new BufferedReader(new FileReader(cmd.getOptionValue("i")));
             String line;
             while ((line = reader.readLine()) != null) {
                 for (int idx = 0; idx < line.length(); idx++) {
