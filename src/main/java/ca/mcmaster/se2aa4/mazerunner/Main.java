@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("** Starting Maze Runner");
+        logger.info("** Starting Maze Runner");
         Options cli_options = new Options();
         cli_options.addOption("i", "input", true, "specifies a .txt file holding matrix");
         CommandLineParser cli_parser = new DefaultParser();
@@ -21,25 +21,25 @@ public class Main {
         try {
             
             CommandLine cmd = cli_parser.parse(cli_options, args);
-            System.out.println("**** Reading the maze from file " + cmd.getOptionValue("i"));
+            logger.info("**** Reading the maze from file " + cmd.getOptionValue("i"));
 
             BufferedReader reader = new BufferedReader(new FileReader(cmd.getOptionValue("i")));
             String line;
             while ((line = reader.readLine()) != null) {
                 for (int idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
+                        logger.info("WALL ");
                     } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
+                        logger.info("PASS ");
                     }
                 }
-                System.out.print(System.lineSeparator());
+                logger.info(System.lineSeparator());
             }
         } catch(Exception e) {
-            System.err.println("/!\\ An error has occured /!\\");
+            logger.error("/!\\ An error has occured /!\\");
         }
-        System.out.println("**** Computing path");
-        System.out.println("PATH NOT COMPUTED");
-        System.out.println("** End of MazeRunner");
+        logger.info("**** Computing path");
+        logger.info("PATH NOT COMPUTED");
+        logger.info("** End of MazeRunner");
     }
 }
