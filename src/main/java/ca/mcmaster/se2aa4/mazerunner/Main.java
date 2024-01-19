@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Set up a configuration
+        // Set up configuration
         try {
             Configuration config = configure(args);
             System.out.println(config);
@@ -34,7 +34,7 @@ public class Main {
         }
 
         logger.info("**** Computing path");
-        logger.info("PATH NOT COMPUTED");
+        logger.error("PATH NOT COMPUTED");
         logger.info("** End of MazeRunner");
     }
 
