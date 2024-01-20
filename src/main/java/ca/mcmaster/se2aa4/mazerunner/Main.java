@@ -22,6 +22,9 @@ public class Main {
         try {
             Configuration config = configure(args);
             System.out.println(config);
+            Maze maze = new Maze(config.maze_file); // Maze has a start() method
+            MazePath maze_path = maze.path();
+            System.out.println(maze_path);
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);
@@ -62,6 +65,8 @@ public class Main {
         }
     }
 }
+
+
 
 // logger.info("**** Reading the maze from file " + cmd.getOptionValue("i"));
 /* 
