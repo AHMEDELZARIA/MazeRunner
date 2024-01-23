@@ -4,11 +4,9 @@ import java.util.logging.LogManager;
 
 public class MazePath {
     
-    private final Integer length;
     private final String directions;
 
-    public MazePath(Integer length, String directions) {
-        this.length = length;
+    public MazePath(String directions) {
         this.directions = directions;
     }
 

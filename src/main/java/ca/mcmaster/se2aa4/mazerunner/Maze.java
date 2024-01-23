@@ -39,8 +39,9 @@ public class Maze {
 
             for (int row = 0; row < rows; row++) {
                 line = reader2.readLine();
+                System.out.println(line);
                 for (int col = 0; col < cols; col++) {
-                    maze[row][col] = (col < cols ? (line.charAt(col) == '#' ? Tile.WALL : Tile.EMPTY) : Tile.EMPTY);
+                    maze[row][col] = (line.charAt(col) == '#' ? Tile.WALL : Tile.EMPTY);
                 }
             }
 
@@ -67,12 +68,7 @@ public class Maze {
         }
     }
 
-    public MazePath path() {
-        MazeExplorer maze_exp = new RightHand();
-        return maze_exp.find_path(this);
-    }
-
-    public int[][] start() {
+    public int[][] entry_exit_positions() {
 
         int rows = this.maze_grid.length;
         int cols = this.maze_grid[0].length;
@@ -92,4 +88,15 @@ public class Maze {
 
         return start_end;
     }
+
+    public MazePath path() {
+        MazeExplorer maze_exp = new RightHand();
+        return maze_exp.find_path(this.maze_grid, entry_exit_positions());
+    }
+
+    public String valid_path(MazePath user_path) {
+        MazeExplorer maze_exp = new RightHand();
+        return maze_exp.validate_path(entry_exit_positions(), user_path);
+    }
+
 }

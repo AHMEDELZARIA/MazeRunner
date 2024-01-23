@@ -26,14 +26,11 @@ public class Main {
         // Set up configuration
         try {
             Configuration config = configure(args);
-            System.out.println(config);
-            Maze maze = new Maze(config.maze_file); // Maze has a start() method
+            Maze maze = new Maze(config.maze_file);
             maze.print_maze();
-            int[][] start_end = maze.start();
-            System.out.println(String.valueOf(start_end[0][0]) + " " + String.valueOf(start_end[0][1]));
-            System.out.println(String.valueOf(start_end[1][0]) + " " + String.valueOf(start_end[1][1]));
-            //MazePath maze_path = maze.path();
-            //System.out.println(maze_path);
+            MazePath maze_path = maze.path();
+            System.out.println(maze_path);
+            System.out.println(maze.valid_path(config.user_path));
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);
@@ -56,17 +53,19 @@ public class Main {
         // Add option to input a .txt file holding maze
         Options cli_options = new Options();
         cli_options.addOption("i", "input", true, "specifies a .txt file holding maze");
+        cli_options.addOption("p", true, "specifies a maze path for validation");
         
         // Parse the command line input for input option
         CommandLineParser cli_parser = new DefaultParser();
         CommandLine cmd = cli_parser.parse(cli_options, args);
         File maze_file = new File(cmd.getOptionValue("i"));
+        MazePath user_path = new MazePath(cmd.getOptionValue("p"));
         logger.info("Input file path is: " + maze_file);
 
-        return new Configuration(maze_file);
+        return new Configuration(maze_file, user_path);
     }
 
-    private record Configuration(File maze_file) {
+    private record Configuration(File maze_file, MazePath user_path) {
         Configuration {
             if (!maze_file.exists()) {
                 throw new IllegalArgumentException("Maze .txt file not found: " + maze_file);
