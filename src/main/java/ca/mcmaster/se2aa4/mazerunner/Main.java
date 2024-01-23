@@ -28,8 +28,9 @@ public class Main {
             Configuration config = configure(args);
             System.out.println(config);
             Maze maze = new Maze(config.maze_file); // Maze has a start() method
-            MazePath maze_path = maze.path();
-            System.out.println(maze_path);
+            maze.print_maze();
+            //MazePath maze_path = maze.path();
+            //System.out.println(maze_path);
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);
@@ -70,21 +71,3 @@ public class Main {
         }
     }
 }
-
-
-
-// logger.info("**** Reading the maze from file " + cmd.getOptionValue("i"));
-/* 
-BufferedReader reader = new BufferedReader(new FileReader(cmd.getOptionValue("i")));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
-                    }
-                }
-                System.lineSeparator();
-            }
-            */
