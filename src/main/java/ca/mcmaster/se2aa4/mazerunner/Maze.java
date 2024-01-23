@@ -24,7 +24,7 @@ public class Maze {
     private Tile[][] load_maze(File maze_file) {
 
         try {
-            
+
             BufferedReader reader = new BufferedReader(new FileReader(maze_file));
             int rows = 1, cols = reader.readLine().length();
             
@@ -72,5 +72,24 @@ public class Maze {
         return maze_exp.find_path(this);
     }
 
-    private int start() { return 10; }
+    public int[][] start() {
+
+        int rows = this.maze_grid.length;
+        int cols = this.maze_grid[0].length;
+        int [][] start_end = new int[2][2];
+
+        for (int row = 0; row < rows; row++) {
+            if (this.maze_grid[row][0] == Tile.EMPTY) {
+                start_end[0][0] = row;
+                start_end[0][1] = 0;
+            }
+
+            if (this.maze_grid[row][cols - 1] == Tile.EMPTY) {
+                start_end[1][0] = row;
+                start_end[1][1] = cols - 1;
+            }
+        }
+
+        return start_end;
+    }
 }

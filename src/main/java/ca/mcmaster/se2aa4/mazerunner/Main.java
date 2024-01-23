@@ -29,6 +29,9 @@ public class Main {
             System.out.println(config);
             Maze maze = new Maze(config.maze_file); // Maze has a start() method
             maze.print_maze();
+            int[][] start_end = maze.start();
+            System.out.println(String.valueOf(start_end[0][0]) + " " + String.valueOf(start_end[0][1]));
+            System.out.println(String.valueOf(start_end[1][0]) + " " + String.valueOf(start_end[1][1]));
             //MazePath maze_path = maze.path();
             //System.out.println(maze_path);
         } catch(ParseException pe) {
