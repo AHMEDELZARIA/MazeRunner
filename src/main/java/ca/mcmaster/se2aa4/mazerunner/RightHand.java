@@ -29,9 +29,9 @@ public class RightHand implements MazeExplorer {
         }
 
         if ((current_pos[0] == final_pos[0]) && (current_pos[1] == final_pos[1])) {
-            return "correct path";
+            return "Correct path";
         } else {
-            return "incorrect path";
+            return "Incorrect path";
         }
     }
 }
