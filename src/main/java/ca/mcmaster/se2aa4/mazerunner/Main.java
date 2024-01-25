@@ -30,7 +30,7 @@ public class Main {
             maze.print_maze();
             MazePath maze_path = maze.path();
             System.out.println(maze_path);
-            System.out.println(maze.valid_path(config.user_path));
+            //System.out.println(maze.valid_path(config.user_path));
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);

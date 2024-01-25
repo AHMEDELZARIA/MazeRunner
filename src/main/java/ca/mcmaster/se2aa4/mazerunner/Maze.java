@@ -94,9 +94,5 @@ public class Maze {
         return maze_exp.find_path(this.maze_grid, entry_exit_positions());
     }
 
-    public String valid_path(MazePath user_path) {
-        MazeExplorer maze_exp = new RightHand();
-        return maze_exp.validate_path(entry_exit_positions(), user_path);
-    }
-
+    
 }
