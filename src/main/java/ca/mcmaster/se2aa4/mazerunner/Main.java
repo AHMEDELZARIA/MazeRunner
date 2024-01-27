@@ -29,8 +29,12 @@ public class Main {
             Configuration config = configure(args);
             Maze maze = new Maze(config.maze_file);
 
-            
-            
+            if (config.path_provided) {
+                System.out.println(maze.valid_path(config.user_path));
+            } else {
+                System.out.println(maze.path());
+            }
+
 
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
@@ -47,29 +51,32 @@ public class Main {
 
 
 
-    private static Configuration configure(String[] args) throws ParseException, NullPointerException {
+    private static Configuration configure(String[] args) throws ParseException, NullPointerException, IllegalArgumentException {
         // Add option to input a .txt file holding maze
         Options cli_options = new Options();
         cli_options.addOption("i", "input", true, "specifies a .txt file holding maze");
         cli_options.addOption("p", true, "specifies a maze path for validation");
         
+        
         // Parse the command line input for input option
         CommandLineParser cli_parser = new DefaultParser();
         CommandLine cmd = cli_parser.parse(cli_options, args);
+
+        
+        if (!cmd.hasOption("i")) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("java -jar ./mazerunner.target -i <maze_file> {OPTIONAL} -p <maze_path>", cli_options);
+            System.exit(1);
+        }
+
         File maze_file = new File(cmd.getOptionValue("i"));
         MazePath user_path = new MazePath(cmd.getOptionValue("p"));
-        if (!cmd.hasOption("i")) {
-            throw new IllegalArgumentException("Usage: java -jar ./mazerunner.target -i ./PATH/TO/MAZE {OPTIONAL} -p 'MAZE PATH'");
-        }
-        //boolean i_opt_specified = cmd.hasOption("i");
-        //boolean p_opt_specified = cmd.hasOption("p");
-        //System.out.println(i_opt_specified);
-        //System.out.println(p_opt_specified);
+        boolean path_provided = cmd.hasOption("p") ? true : false;
 
-        return new Configuration(maze_file, user_path);
+        return new Configuration(maze_file, user_path, path_provided);
     }
 
-    private record Configuration(File maze_file, MazePath user_path) {
+    private record Configuration(File maze_file, MazePath user_path, boolean path_provided) {
         Configuration {
             if (!maze_file.exists()) {
                 throw new IllegalArgumentException("Maze .txt file not found: " + maze_file);

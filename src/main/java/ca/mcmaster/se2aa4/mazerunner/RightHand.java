@@ -53,7 +53,6 @@ public class RightHand implements IMazeExplorer {
     public boolean valid_path(Maze maze, MazePath path) {
     
         String user_path = path.toCanonical();
-        System.out.println(user_path);
         boolean wall_infront = false;
         int[] current_pos = maze.getEntryExit()[1];
         int[] final_pos = maze.getEntryExit()[0];
