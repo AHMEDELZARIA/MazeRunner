@@ -28,19 +28,9 @@ public class Main {
             
             Configuration config = configure(args);
             Maze maze = new Maze(config.maze_file);
-            System.out.println(maze.path());
 
-            System.out.println("____________________");
-            System.out.println(config.user_path);
-            System.out.println("________");
-            System.out.println(config.user_path.toFactorized());
-            System.out.println("____________________");
-
-            try {
-                System.out.println(maze.valid_path(config.user_path));
-            } catch (Exception e) {
-                System.exit(1);
-            }
+            
+            
 
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
@@ -68,7 +58,13 @@ public class Main {
         CommandLine cmd = cli_parser.parse(cli_options, args);
         File maze_file = new File(cmd.getOptionValue("i"));
         MazePath user_path = new MazePath(cmd.getOptionValue("p"));
-        logger.info("Input file path is: " + maze_file);
+        if (!cmd.hasOption("i")) {
+            throw new IllegalArgumentException("Usage: java -jar ./mazerunner.target -i ./PATH/TO/MAZE {OPTIONAL} -p 'MAZE PATH'");
+        }
+        //boolean i_opt_specified = cmd.hasOption("i");
+        //boolean p_opt_specified = cmd.hasOption("p");
+        //System.out.println(i_opt_specified);
+        //System.out.println(p_opt_specified);
 
         return new Configuration(maze_file, user_path);
     }

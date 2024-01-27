@@ -29,16 +29,21 @@ public class MazePath {
             if (Character.isDigit(curr_char)) {
                 // Check to see if number is more than 1 digit
                 String num = "";
-                num += curr_char;
-                while (Character.isDigit(path.charAt(i+1))) {
-                    num+=curr_char;
-                    i++;
+                num+= curr_char;
+                int j = i+1;
+                while (Character.isDigit(path.charAt(j))) {
+                    num+=path.charAt(j);
+                    j++;
                 }
-                // Acquire the instruction, add it num times to can_path
+
                 num_inst = Integer.parseInt(num);
-                inst = path.charAt(i+1);
-                for (int j = 0; j < num_inst; j++) { can_path.append(inst); }
-                i += 2;
+                inst = path.charAt(j);
+
+                for (int k = 0; k < num_inst; k++) {
+                    can_path.append(inst);
+                }
+
+                i = j+1;
                 
             } else {
                 // Add the single instruction to can_path
@@ -57,15 +62,8 @@ public class MazePath {
         String fact_path = "";
         int occur = 0;
         
-        int i = 0, j = 1;
+        int i = 0, j;
         while (i < path.length()) {
-
-            if (Character.isDigit(path.charAt(i))) { 
-                fact_path += String.valueOf(path.charAt(i));
-                i++;
-                j++;
-                continue;
-            }
             
             for (j = i; j < path.length(); j++) {
                 if (path.charAt(j) == path.charAt(i)) {

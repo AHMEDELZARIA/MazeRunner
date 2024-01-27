@@ -34,7 +34,7 @@ public class Maze {
 
             for (int row = 0; row < rows; row++) {
                 line = reader2.readLine();
-                System.out.println(line);
+                //System.out.println(line);
                 for (int col = 0; col < cols; col++) {
                     maze[row][col] = (line.charAt(col) == '#' ? Tile.WALL : Tile.EMPTY);
                 }

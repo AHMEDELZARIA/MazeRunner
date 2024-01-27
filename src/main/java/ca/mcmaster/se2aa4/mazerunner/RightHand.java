@@ -76,7 +76,6 @@ public class RightHand implements IMazeExplorer {
                         case 'F':
                             wall_infront = check_infront(maze, current_pos, dir);
                             if (wall_infront) {
-                                System.out.println(user_path.charAt(j));
                                 throw new Exception();
                             } else {
                                 current_pos = move_forward(current_pos, dir);
@@ -89,11 +88,10 @@ public class RightHand implements IMazeExplorer {
                             dir = turn_left(dir);
                             break;
                         default:
-                            break;
+                            throw new Exception();
                     }
                     
                 } catch (Exception e) {
-                    System.out.println("AYEEEEEEEE");
                     invalid_dir = true;
                     path_results[i] = "Incorrect Path";
                     break;
