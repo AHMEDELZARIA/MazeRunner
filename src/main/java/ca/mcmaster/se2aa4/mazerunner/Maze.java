@@ -3,17 +3,12 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Maze {
 
-    private static final Logger logger = LogManager.getLogger();
-
     private final Tile[][] maze_grid;
+
+    private final IMazeExplorer maze_exp = new RightHand();
 
     public Maze(File maze_file) {
         
@@ -50,7 +45,7 @@ public class Maze {
             return maze;
 
         } catch (Exception e) {
-            System.err.print("ERROR LOADING MATRIX\n");
+            System.out.println("Error Reading Maze.");
             System.exit(1);
             return null;
         }
@@ -59,16 +54,21 @@ public class Maze {
 
     }
 
-    public void print_maze() {
-        for (Tile[] row : this.maze_grid) {
-            for (Tile element: row) {
-                System.out.print(element);
-            }
-            System.out.println();
+    public int getHeight() { return this.maze_grid.length; }
+
+    public int getWidth() { return this.maze_grid[0].length; }
+
+    public Tile tileAt(int x, int y) { 
+
+        try {
+            return this.maze_grid[x][y];
+        } catch (Exception e) {
+            return Tile.WALL;
         }
+
     }
 
-    public int[][] entry_exit_positions() {
+    public int[][] getEntryExit() {
 
         int rows = this.maze_grid.length;
         int cols = this.maze_grid[0].length;
@@ -90,9 +90,13 @@ public class Maze {
     }
 
     public MazePath path() {
-        MazeExplorer maze_exp = new RightHand();
-        return maze_exp.find_path(this.maze_grid, entry_exit_positions());
+        return this.maze_exp.path(this);
     }
 
-    
+    public String valid_path(MazePath user_path) {
+        boolean valid = this.maze_exp.valid_path(this, user_path);
+
+        return valid ? "Correct Path" : "Incorrect Path";
+    }
+
 }

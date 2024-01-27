@@ -21,16 +21,27 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ALL);
+        //Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ALL);
 
         // Set up configuration
         try {
+            
             Configuration config = configure(args);
             Maze maze = new Maze(config.maze_file);
-            maze.print_maze();
-            MazePath maze_path = maze.path();
-            System.out.println(maze_path);
-            //System.out.println(maze.valid_path(config.user_path));
+            System.out.println(maze.path());
+
+            System.out.println("____________________");
+            System.out.println(config.user_path);
+            System.out.println("________");
+            System.out.println(config.user_path.toFactorized());
+            System.out.println("____________________");
+
+            try {
+                System.out.println(maze.valid_path(config.user_path));
+            } catch (Exception e) {
+                System.exit(1);
+            }
+
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);
@@ -42,9 +53,6 @@ public class Main {
             System.exit(1);
         }
 
-        logger.info("**** Computing path");
-        logger.error("PATH NOT COMPUTED");
-        logger.info("** End of MazeRunner");
     }
 
 
@@ -69,6 +77,9 @@ public class Main {
         Configuration {
             if (!maze_file.exists()) {
                 throw new IllegalArgumentException("Maze .txt file not found: " + maze_file);
+            }
+            if (maze_file.length() == 0) {
+                throw new IllegalArgumentException("Maze is empty");
             }
         }
     }

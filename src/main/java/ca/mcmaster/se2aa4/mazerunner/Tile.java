@@ -9,5 +9,5 @@ public enum Tile {
     Tile(char symbol) { this.symbol = symbol; }
 
     @Override
-    public String toString() { return "" + symbol; }
+    public String toString() { return symbol + ""; }
 }

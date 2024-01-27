@@ -2,12 +2,13 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.Arrays;
 
-public class RightHand implements MazeExplorer {
+public class RightHand implements IMazeExplorer {
 
-    public MazePath find_path(Tile[][] maze, int[][] entry_exit) {
+    public MazePath path(Maze maze) {
 
-        int[] curr_pos = entry_exit[1];
-        int[] exit_pos = entry_exit[0];
+        int[][] entry_points = maze.getEntryExit();
+        int[] exit_pos = entry_points[0];
+        int[] curr_pos = entry_points[1];
         char dir = 'W';
         boolean wall_to_right = false;
         boolean wall_infront = false;
@@ -22,7 +23,7 @@ public class RightHand implements MazeExplorer {
             if (wall_to_right) {
                 
                 // Is there a wall in front?
-                wall_infront = check_infront(maze, curr_pos, dir);
+                wall_infront = check_infront(maze,curr_pos, dir);
                 
                 // If yes
                 if (wall_infront) {
@@ -31,7 +32,7 @@ public class RightHand implements MazeExplorer {
                     path += "L ";
                 } else {
                     // Else move forward
-                    curr_pos = move_forward(maze, curr_pos, dir);
+                    curr_pos = move_forward(curr_pos, dir);
                     path += "F ";
                 }
 
@@ -39,7 +40,7 @@ public class RightHand implements MazeExplorer {
                 
                 // Turn right and move forward
                 dir = turn_right(dir);
-                curr_pos = move_forward(maze, curr_pos, dir);
+                curr_pos = move_forward(curr_pos, dir);
                 path += "R F ";
                 
             }
@@ -49,7 +50,74 @@ public class RightHand implements MazeExplorer {
         return new MazePath(path);
     }
 
-    private int[] move_forward(Tile[][] maze, int[] current_pos, char dir) {
+    public boolean valid_path(Maze maze, MazePath path) {
+    
+        String user_path = path.toCanonical();
+        System.out.println(user_path);
+        boolean wall_infront = false;
+        int[] current_pos = maze.getEntryExit()[1];
+        int[] final_pos = maze.getEntryExit()[0];
+        int[] end = {current_pos[0], current_pos[1]};
+        String[] path_results = new String[2];
+        
+        for (int i = 0; i < 2; i++) {
+            
+            char dir = (i == 0) ? 'W' : 'E';
+            current_pos = (i == 0) ? current_pos: final_pos;
+            final_pos = (i == 0) ? final_pos: end;
+            boolean invalid_dir = false;
+            
+            // Check path from right
+            for (int j = 0; j < user_path.length(); j++) {
+                
+                try {
+                    
+                    switch (user_path.charAt(j)) {
+                        case 'F':
+                            wall_infront = check_infront(maze, current_pos, dir);
+                            if (wall_infront) {
+                                System.out.println(user_path.charAt(j));
+                                throw new Exception();
+                            } else {
+                                current_pos = move_forward(current_pos, dir);
+                            }
+                            break;
+                        case 'R':
+                            dir = turn_right(dir);
+                            break;
+                        case 'L':
+                            dir = turn_left(dir);
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                } catch (Exception e) {
+                    System.out.println("AYEEEEEEEE");
+                    invalid_dir = true;
+                    path_results[i] = "Incorrect Path";
+                    break;
+                }
+                
+            }
+            
+            if (Arrays.equals(current_pos, final_pos) && !invalid_dir) {
+                path_results[i] = "Correct Path";
+            } else {
+                path_results[i] = "Incorrect Path";
+            }
+        }
+        
+        if (path_results[0].equals("Correct Path") || path_results[1].equals("Correct Path")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+
+    private int[] move_forward(int[] current_pos, char dir) {
             
         switch (dir) {
             case 'W':
@@ -104,12 +172,12 @@ public class RightHand implements MazeExplorer {
 
     } 
     
-    private static boolean check_right(Tile[][] maze, int[] current_pos, char dir) {
+    private boolean check_right(Maze maze, int[] current_pos, char dir) {
         
         switch (dir) {
             case 'W':
                 
-                if (maze[current_pos[0] - 1][current_pos[1]] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0] - 1, current_pos[1]) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -117,7 +185,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'E':
                 
-                if (maze[current_pos[0] + 1][current_pos[1]] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0] + 1, current_pos[1]) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -125,7 +193,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'N':
                 
-                if (maze[current_pos[0]][current_pos[1] + 1] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0], current_pos[1] + 1) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -133,7 +201,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'S':
                 
-                if (maze[current_pos[0]][current_pos[1] - 1] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0], current_pos[1] - 1) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -145,12 +213,12 @@ public class RightHand implements MazeExplorer {
         
     }
     
-    private static boolean check_infront(Tile[][] maze, int[] current_pos, char dir) {
+    private boolean check_infront(Maze maze, int[] current_pos, char dir) {
         
         switch (dir) {
             case 'W':
                 
-                if (maze[current_pos[0]][current_pos[1] - 1] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0], current_pos[1] - 1) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -158,7 +226,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'E':
                 
-                if (maze[current_pos[0]][current_pos[1] + 1] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0], current_pos[1] + 1) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -166,7 +234,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'N':
                 
-                if (maze[current_pos[0] - 1][current_pos[1]] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0] - 1, current_pos[1]) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -174,7 +242,7 @@ public class RightHand implements MazeExplorer {
                 
             case 'S':
                 
-                if (maze[current_pos[0] + 1][current_pos[1]] == Tile.WALL) {
+                if (maze.tileAt(current_pos[0] + 1, current_pos[1]) == Tile.WALL) {
                     return true;
                 } else {
                     return false;
@@ -182,26 +250,7 @@ public class RightHand implements MazeExplorer {
                 
             default:
                 return false;
-        }
-        
+        } 
     }
 
 }
-    /*public String validate_path(int[][] entry_exit, MazePath user_path) {
-
-        int[] current_pos = entry_exit[0];
-        int[] final_pos = entry_exit[1];
-
-        for (int i = 0; i < user_path.toString().length(); i++) {
-            if ((user_path.toString()).charAt(i) == 'F') {
-                current_pos[1] = current_pos[1] + 1;
-            }
-        }
-
-        if ((current_pos[0] == final_pos[0]) && (current_pos[1] == final_pos[1])) {
-            return "Correct path";
-        } else {
-            return "Incorrect path";
-        }
-    }
-    */
