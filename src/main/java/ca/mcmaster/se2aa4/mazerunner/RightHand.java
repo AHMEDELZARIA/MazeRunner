@@ -57,7 +57,7 @@ public class RightHand implements IMazeExplorer {
         int[] current_pos = maze.getEntryExit()[1];
         int[] final_pos = maze.getEntryExit()[0];
         int[] end = {current_pos[0], current_pos[1]};
-        String[] path_results = new String[2];
+        boolean[] path_results = new boolean[2];
         
         for (int i = 0; i < 2; i++) {
             
@@ -92,20 +92,20 @@ public class RightHand implements IMazeExplorer {
                     
                 } catch (Exception e) {
                     invalid_dir = true;
-                    path_results[i] = "Incorrect Path";
+                    path_results[i] = false;
                     break;
                 }
                 
             }
             
             if (Arrays.equals(current_pos, final_pos) && !invalid_dir) {
-                path_results[i] = "Correct Path";
+                path_results[i] = true;
             } else {
-                path_results[i] = "Incorrect Path";
+                path_results[i] = false;
             }
         }
         
-        if (path_results[0].equals("Correct Path") || path_results[1].equals("Correct Path")) {
+        if (path_results[0] || path_results[1]) {
             return true;
         }
         else {

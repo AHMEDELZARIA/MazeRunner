@@ -96,7 +96,7 @@ public class Maze {
     public String valid_path(MazePath user_path) {
         boolean valid = this.maze_exp.valid_path(this, user_path);
 
-        return valid ? "Correct Path" : "Incorrect Path";
+        return valid ? "correct path" : "incorrect path";
     }
 
 }
