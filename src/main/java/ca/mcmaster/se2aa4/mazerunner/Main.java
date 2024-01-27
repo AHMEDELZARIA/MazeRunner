@@ -19,38 +19,36 @@ public class Main {
 
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * Entry point for the system.
+     * @param args command line arguments from the user
+     */
     public static void main(String[] args) {
-
         //Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ALL);
-
-        // Set up configuration
         try {
-            
             Configuration config = configure(args);
             Maze maze = new Maze(config.maze_file);
 
-            if (config.path_provided) {
+            if (config.user_path.equals(null)) {
                 System.out.println(maze.valid_path(config.user_path));
             } else {
                 System.out.println(maze.path());
             }
-
-
-        } catch(ParseException pe) {
-            System.err.println(pe.getMessage());
-            System.exit(1);
-        } catch(NullPointerException npe) {
-            System.err.println(npe.getMessage());
-            System.exit(1);
-        } catch(IllegalArgumentException iae) {
-            System.err.println(iae.getMessage());
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
-
     }
 
-
-
+    /**
+     * Read arguments using Apache CLI libraray and store them in a configuration.
+     * @param args
+     * @return Configuration with the file holding the maze, the path specified for user (if applicable)
+     * @throws ParseException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
     private static Configuration configure(String[] args) throws ParseException, NullPointerException, IllegalArgumentException {
         // Add option to input a .txt file holding maze
         Options cli_options = new Options();
@@ -71,12 +69,11 @@ public class Main {
 
         File maze_file = new File(cmd.getOptionValue("i"));
         MazePath user_path = new MazePath(cmd.getOptionValue("p"));
-        boolean path_provided = cmd.hasOption("p") ? true : false;
 
-        return new Configuration(maze_file, user_path, path_provided);
+        return new Configuration(maze_file, user_path);
     }
 
-    private record Configuration(File maze_file, MazePath user_path, boolean path_provided) {
+    private record Configuration(File maze_file, MazePath user_path) {
         Configuration {
             if (!maze_file.exists()) {
                 throw new IllegalArgumentException("Maze .txt file not found: " + maze_file);
