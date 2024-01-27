@@ -19,13 +19,15 @@ public class Main {
 
     private static final Logger logger = LogManager.getLogger();
 
+    /**
+     * Entry point for the software system
+     * @param args command line arguments from user
+     */
     public static void main(String[] args) {
 
         //Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ALL);
 
-        // Set up configuration
         try {
-            
             Configuration config = configure(args);
             Maze maze = new Maze(config.maze_file);
 
@@ -34,8 +36,6 @@ public class Main {
             } else {
                 System.out.println(maze.path());
             }
-
-
         } catch(ParseException pe) {
             System.err.println(pe.getMessage());
             System.exit(1);
