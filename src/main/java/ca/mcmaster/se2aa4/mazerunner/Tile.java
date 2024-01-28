@@ -1,5 +1,8 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+/**
+ * Enum representing a tile of the maze.
+ */
 public enum Tile {
     WALL('#'),
     EMPTY(' ');
