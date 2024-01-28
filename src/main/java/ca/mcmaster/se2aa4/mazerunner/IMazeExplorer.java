@@ -20,6 +20,6 @@ public interface IMazeExplorer {
      * @param user_path MazePath, holding path that will be checked
      * @return true if valid, false otherwise
      */
-    boolean valid_path(Maze maze, MazePath user_path);
+    boolean validPath(Maze maze, MazePath user_path);
     
 }

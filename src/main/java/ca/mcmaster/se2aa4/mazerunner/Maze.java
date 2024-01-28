@@ -20,14 +20,14 @@ public class Maze {
      * Create a maze, considering the maze file provided in the configuration from user.
      * @param maze_file File object holding the maze provided by user
      */
-    public Maze(File maze_file) { this.maze_grid = load_maze(maze_file); }
+    public Maze(File maze_file) { this.maze_grid = loadMaze(maze_file); }
 
     /**
      * Load a maze into a Tile[][] structure from user provided maze file.
      * @param maze_file File object holding the maze provided by user
      * @return the maze from maze_file loaded into Tile[][] structure
      */
-    private Tile[][] load_maze(File maze_file) {
+    private Tile[][] loadMaze(File maze_file) {
         try {
             // Determine maze dimensions
             BufferedReader reader = new BufferedReader(new FileReader(maze_file));
@@ -116,8 +116,8 @@ public class Maze {
      * @param user_path MazePath representing the path to be verified
      * @return String "correct path" if valid and "incorrect path" otherwise
      */
-    public String valid_path(MazePath user_path) {
-        boolean valid = this.maze_exp.valid_path(this, user_path);
+    public String validPath(MazePath user_path) {
+        boolean valid = this.maze_exp.validPath(this, user_path);
         return valid ? "correct path" : "incorrect path";
     }
 

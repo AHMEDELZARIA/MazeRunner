@@ -92,5 +92,5 @@ public class MazePath {
         
         return fact_path;
     }
-
+    
 }

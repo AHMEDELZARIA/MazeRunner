@@ -24,25 +24,25 @@ public class RightHand implements IMazeExplorer {
 
         while (!Arrays.equals(curr_pos, exit_pos)) {
             // Is there a wall to the right?
-            wall_to_right = check_right(maze, curr_pos, dir);
+            wall_to_right = checkRight(maze, curr_pos, dir);
             // If yes
             if (wall_to_right) {
                 // Is there a wall in front?
-                wall_infront = check_infront(maze,curr_pos, dir);
+                wall_infront = checkInfront(maze,curr_pos, dir);
                 // If yes
                 if (wall_infront) {
                     // Turn left
-                    dir = turn_left(dir);
+                    dir = turnLeft(dir);
                     path += Movement.LEFT + " ";
                 } else {
                     // Else move forward
-                    curr_pos = move_forward(curr_pos, dir);
+                    curr_pos = moveForward(curr_pos, dir);
                     path += Movement.FORWARD + " ";
                 }
             } else {
                 // Turn right and move forward
-                dir = turn_right(dir);
-                curr_pos = move_forward(curr_pos, dir);
+                dir = turnRight(dir);
+                curr_pos = moveForward(curr_pos, dir);
                 path += Movement.RIGHT + " " + Movement.FORWARD + " ";
             }
         }
@@ -56,7 +56,7 @@ public class RightHand implements IMazeExplorer {
      * @param path MazePath representing the path to be verified
      * @return true if path is valid and false otherwise
      */
-    public boolean valid_path(Maze maze, MazePath path) {
+    public boolean validPath(Maze maze, MazePath path) {
         String user_path = path.toCanonical(); // First convert path to Canonical form
         int[] current_pos = maze.getEntryExit()[1]; // Initially equal to the entry on the right
         int[] final_pos = maze.getEntryExit()[0]; // Initially equal to the exit on the left
@@ -77,22 +77,24 @@ public class RightHand implements IMazeExplorer {
                 try {
                     switch (user_path.charAt(j)) {
                         case 'F':
-                            wall_infront = check_infront(maze, current_pos, dir);
+                            wall_infront = checkInfront(maze, current_pos, dir);
                             if (wall_infront) {
                                 // If commanded to move forward, but a wall is present, path is immediately invalid
                                 throw new Exception();
                             } else {
-                                current_pos = move_forward(current_pos, dir);
+                                current_pos = moveForward(current_pos, dir);
                             }
                             break;
                         case 'R':
-                            dir = turn_right(dir);
+                            dir = turnRight(dir);
                             break;
                         case 'L':
-                            dir = turn_left(dir);
+                            dir = turnLeft(dir);
                             break;
                         default:
-                            throw new Exception();
+                            // Handle the case when an incorrect instr is provided in path
+                            System.out.println("Usage: Path must include only L, R, and F. Factorized form of this is also acceptable.");
+                            System.exit(1);
                     }
                 } catch (Exception e) {
                     invalid_instr = true;
@@ -124,7 +126,7 @@ public class RightHand implements IMazeExplorer {
      * @param dir Direction, holds which direction is being faced
      * @return int[], holding the tile infronts [x,y] position
      */
-    private int[] move_forward(int[] current_pos, Direction dir) { 
+    private int[] moveForward(int[] current_pos, Direction dir) { 
         switch (dir) {
             case WEST:
                 current_pos[1] -= 1;
@@ -148,7 +150,7 @@ public class RightHand implements IMazeExplorer {
      * @param dir Direction, holds which direction is being faced  
      * @return Direction to the right of passed in Direction. Ex., if facing NORTH, EAST is returned.
      */
-    private Direction turn_right(Direction dir) {
+    private Direction turnRight(Direction dir) {
         switch (dir) {
             case WEST:
                 return Direction.NORTH;
@@ -168,7 +170,7 @@ public class RightHand implements IMazeExplorer {
      * @param dir Direction, holds which direction is being faced  
      * @return Direction to the left of passed in Direction. Ex., if facing NORTH, WEST is returned.
      */
-    private Direction turn_left(Direction dir) {
+    private Direction turnLeft(Direction dir) {
         switch (dir) {
             case WEST:
                 return Direction.SOUTH;
@@ -190,7 +192,7 @@ public class RightHand implements IMazeExplorer {
      * @param dir Direction, holds which direction is being faced 
      * @return true if wall to right, false otherwise
      */
-    private boolean check_right(Maze maze, int[] current_pos, Direction dir) {
+    private boolean checkRight(Maze maze, int[] current_pos, Direction dir) {
         switch (dir) {
             case WEST:
                 if (maze.tileAt(current_pos[0] - 1, current_pos[1]) == Tile.WALL) {
@@ -228,7 +230,7 @@ public class RightHand implements IMazeExplorer {
      * @param dir Direction, holds which direction is being faced
      * @return true if wall infront and false otherwise
      */
-    private boolean check_infront(Maze maze, int[] current_pos, Direction dir) {
+    private boolean checkInfront(Maze maze, int[] current_pos, Direction dir) {
         switch (dir) {
             case WEST:
                 if (maze.tileAt(current_pos[0], current_pos[1] - 1) == Tile.WALL) {

@@ -30,8 +30,8 @@ public class Main {
             Maze maze = new Maze(config.maze_file);
 
             if (config.path_provided) {
-                System.out.println(maze.valid_path(config.user_path));
-                logger.info(maze.valid_path(config.user_path));
+                System.out.println(maze.validPath(config.user_path));
+                logger.info(maze.validPath(config.user_path));
             } else {
                 System.out.println(maze.path());
                 logger.info(maze.path());
