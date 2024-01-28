@@ -20,9 +20,7 @@ public class Maze {
      * Create a maze, considering the maze file provided in the configuration from user.
      * @param maze_file File object holding the maze provided by user
      */
-    public Maze(File maze_file) {  
-        this.maze_grid = load_maze(maze_file);
-    }
+    public Maze(File maze_file) { this.maze_grid = load_maze(maze_file); }
 
     /**
      * Load a maze into a Tile[][] structure from user provided maze file.
