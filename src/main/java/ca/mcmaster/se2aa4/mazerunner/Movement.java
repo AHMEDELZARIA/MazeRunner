@@ -1,5 +1,8 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+/**
+ * Enum representing possible movements in path.
+ */
 public enum Movement {
     FORWARD('F'),
     LEFT('L'),
